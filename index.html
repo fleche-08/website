@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards SVT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Importation de Font Awesome -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+        .card-container {
+            display: flex;
+            align-items: center;
+            margin: 20px; /* Espace entre les cartes */
+        }
+        .card {
+            width: 200px;
+            height: 100px;
+            perspective: 1000px;
+            margin-right: 60px; /* Espace entre la carte et la zone de texte */
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .card-front {
+            background-color: #e0f7e0; /* Couleur verte pâle */
+        }
+        .card-back {
+            background-color: #b2ebf2; /* Couleur différente pour la définition */
+            transform: rotateY(180deg);
+        }
+        .separator {
+            width: 80%;
+            height: 2px;
+            background-color: #ccc;
+            margin: 20px 0;
+        }
+        .card-violet {
+            background-color: #e1bee7; /* Couleur violet pâle */
+        }
+        .card-violet-back {
+            background-color: #d1c4e9; /* Couleur différente pour la définition violette */
+        }
+        .card-orange {
+            background-color: #ffe0b2; /* Couleur orange pâle */
+        }
+        .card-orange-back {
+            background-color: #ffcc80; /* Couleur différente pour la définition orange */
+        }
+        .input-area {
+            width: 200px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            margin-top: 40px; /* Espace augmenté entre la carte et la barre de texte */
+        }
+        .input-area input {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .indicator {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-left: 10px;
+            display: none; /* Caché par défaut */
+        }
+        .correct {
+            background-color: green; /* Diode verte */
+        }
+        .incorrect {
+            background-color: red; /* Diode rouge */
+        }
+        .submit-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4caf50; /* Couleur verte pour le bouton */
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s; /* Transition pour l'agrandissement */
+            margin-right: 10px; /* Espace entre les boutons */
+        }
+        .submit-button:hover {
+            transform: scale(1.1); /* Agrandissement au survol */
+        }
+        .reset-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: red; /* Couleur rouge pour le bouton de réinitialisation */
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s; /* Transition pour l'agrandissement */
+            display: flex;
+            align-items: center; /* Aligne l'icône et le texte */
+        }
+        .reset-button:hover {
+            transform: scale(1.1); /* Agrandissement au survol */
+        }
+        .reset-button i {
+            margin-right: 5px; /* Espace entre l'icône et le texte */
+        }
+        .score {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Flashcards SVT</h1>
+
+    <!-- Première section de cartes -->
+    <div class="card-container">
+        <div class="card" onclick="this.classList.toggle('flipped');">
+            <div class="card-inner">
+                <div class="card-front">
+                    Biomasse
+                </div>
+                <div class="card-back">
+                    Masse de matière organique d'un ou plusieurs organismes vivants.
+                </div>
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" placeholder="Écrire la définition ici" class="answer-input">
+            <div class="indicator"></div>
+        </div>
+    </div>
+
+    <div class="card-container">
+        <div class="card" onclick="this.classList.toggle('flipped');">
+            <div class="card-inner">
+                <div class="card-front">
+                    Cycle de la matière
+                </div>
+                <div class="card-back">
+                    Processus où la matière se transforme grâce aux organismes vivants.
+                </div>
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" placeholder="Écrire la définition ici" class="answer-input">
+            <div class="indicator"></div>
+        </div>
+    </div>
+
+    <div class="card-container">
+        <div class="card" onclick="this.classList.toggle('flipped');">
+            <div class="card-inner">
+                <div class="card-front">
+                    Décomposeurs
+                </div>
+                <div class="card-back">
+                    Organismes qui transforment la matière organique en matière minérale.
+                </div>
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" placeholder="Écrire la définition ici" class="answer-input">
+            <div class="indicator"></div>
+        </div>
+    </div>
+
+    <div class="card-container">
+        <div class="card" onclick="this.classList.toggle('flipped');">
+            <div class="card-inner">
+                <div class="card-front">
+                    Humus
+                </div>
+                <div class="card-back">
+                    Matière organique dans le sol, formée par la dégradation de feuilles mortes.
+                </div>
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" placeholder="Écrire la définition ici" class="answer-input">
+            <div class="indicator"></div>
+        </div>
+    </div>
+
+    <div class="card-container">
+        <div class="card" onclick="this.classList.toggle('flipped');">
+            <div class="card-inner">
+                <div class="card-front">
+                    Réseau trophique
+                </div>
+                <div class="card-back">
+                    Ensemble des chaînes alimentaires dans un écosystème.
+                </div>
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" placeholder="Écrire la définition ici" class="answer-input">
+            <div class="indicator"></div>
+        </div>
+    </div>
+
+    <!-- Séparation -->
+    <div class="separator"></div>
+
+    <!-- Deuxième section de cartes -->
+    <div class="card-container">
+        <div class="card" onclick="this.classList.toggle('flipped');">
+            <div class="card-inner">
+                <div class="card-front card-violet">
+                    Agrosystème
+                </div>
+                <div class="card-back card-violet-back">
+                    C'est un écosystème modifié par l'homme pour produire de la nourriture ou d'autres produits agricoles.
+                </div>
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" placeholder="Écrire la définition ici" class="answer-input">
+            <div class="indicator"></div>
+        </div>
+    </div>
+
+    <div class="card-container">
+        <div class="card" onclick="this.classList.toggle('flipped');">
+            <div class="card-inner">
+                <div class="card-front card-violet">
+                    Masse vivante
+                </div>
+                <div class="card-back card-violet-back">
+                    La masse de matière organique qui compose un organisme ou un groupe d'organismes vivants.
+                </div>
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" placeholder="Écrire la définition ici" class="answer-input">
+            <div class="indicator"></div>
+        </div>
+    </div>
+
+    <div class="card-container">
+        <div class="card" onclick="this.classList.toggle('flipped');">
+            <div class="card-inner">
+                <div class="card-front card-violet">
+                    Intrant
+                </div>
+                <div class="card-back card-violet-back">
+                    Tout ce qu'on ajoute dans un système agricole pour améliorer la production.
+                </div>
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" placeholder="Écrire la définition ici" class="answer-input">
+            <div class="indicator"></div>
+        </div>
+    </div>
+
+    <div class="card-container">
+        <div class="card" onclick="this.classList.toggle('flipped');">
+            <div class="card-inner">
+                <div class="card-front card-violet">
+                    Production agricole
+                </div>
+                <div class="card-back card-violet-back">
+                    Le résultat des activités agricoles, comme les cultures ou l'élevage, qui produisent de la nourriture ou d'autres produits.
+                </div>
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" placeholder="Écrire la définition ici" class="answer-input">
+            <div class="indicator"></div>
+        </div>
+    </div>
+
+    <div class="card-container">
+        <div class="card" onclick="this.classList.toggle('flipped');">
+            <div class="card-inner">
+                <div class="card-front card-orange">
+                    Vivrier ou de subsistance
+                </div>
+                <div class="card-back card-orange-back">
+                    Production de l'alimentation des paysans et de leur famille.
+                </div>
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" placeholder="Écrire la définition ici" class="answer-input">
+            <div class="indicator"></div>
+        </div>
+    </div>
+
+    <div class="card-container">
+        <div class="card" onclick="this.classList.toggle('flipped');">
+            <div class="card-inner">
+                <div class="card-front card-orange">
+                    Extensif
+                </div>
+                <div class="card-back card-orange-back">
+                    Production avec des rendements faibles sur de grandes surfaces.
+                </div>
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" placeholder="Écrire la définition ici" class="answer-input">
+            <div class="indicator"></div>
+        </div>
+    </div>
+
+    <div class="card-container">
+        <div class="card" onclick="this.classList.toggle('flipped');">
+            <div class="card-inner">
+                <div class="card-front card-orange">
+                    Intensif
+                </div>
+                <div class="card-back card-orange-back">
+                    Forte production, rapide, sur une petite surface.
+                </div>
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" placeholder="Écrire la définition ici" class="answer-input">
+            <div class="indicator"></div>
+        </div>
+    </div>
+
+    <div class="score">Votre note est de : <span id="score">0</span></div>
+    <button class="submit-button" onclick="checkAnswers()">Soumettre</button>
+    <button class="reset-button" onclick="resetProgram()"><i class="fas fa-trash"></i> Réinitialiser</button>
+
+    <script>
+        function checkAnswers() {
+            const definitions = [
+                "Masse de matière organique d'un ou plusieurs organismes vivants.",
+                "Processus où la matière se transforme grâce aux organismes vivants.",
+                "Organismes qui transforment la matière organique en matière minérale.",
+                "Matière organique dans le sol, formée par la dégradation de feuilles mortes.",
+                "Ensemble des chaînes alimentaires dans un écosystème.",
+                "C'est un écosystème modifié par l'homme pour produire de la nourriture ou d'autres produits agricoles.",
+                "La masse de matière organique qui compose un organisme ou un groupe d'organismes vivants.",
+                "Tout ce qu'on ajoute dans un système agricole pour améliorer la production.",
+                "Le résultat des activités agricoles, comme les cultures ou l'élevage.",
+                "Production de l'alimentation des paysans et de leur famille.",
+                "Production avec des rendements faibles sur de grandes surfaces.",
+                "Forte production, rapide, sur une petite surface."
+            ];
+
+            const inputs = document.querySelectorAll('.answer-input');
+            let score = 0;
+            let totalScore = 0;
+
+            inputs.forEach((input, index) => {
+                const userAnswer = input.value.toLowerCase();
+                const definition = definitions[index].toLowerCase();
+                
+                const definitionWords = definition.split(' ');
+                const userWords = userAnswer.split(' ');
+
+                // Compte le nombre de mots de la définition présents dans la réponse de l'utilisateur
+                const matchedWordsCount = userWords.filter(word => definitionWords.includes(word)).length;
+
+                // Vérifie si la réponse est correcte
+                if (matchedWordsCount >= 4) {
+                    score++;
+                    // Allume la diode pour la réponse correcte
+                    const indicator = input.nextElementSibling;
+                    indicator.classList.add('correct');
+                    indicator.style.display = 'block';
+                } else {
+                    // Allume la diode pour la réponse incorrecte
+                    const indicator = input.nextElementSibling;
+                    indicator.classList.add('incorrect');
+                    indicator.style.display = 'block';
+                }
+
+                totalScore++;
+            });
+
+            // Calcul de la note sur 14
+            const noteSur14 = score; 
+            // Calcul de la note ramenée sur 10
+            const noteSur10 = (score / totalScore) * 10;
+
+            document.getElementById('score').innerText = `${noteSur14}/14 (soit ${noteSur10.toFixed(1)}/10)`;
+        }
+
+        function resetProgram() {
+            const inputs = document.querySelectorAll('.answer-input');
+            inputs.forEach(input => {
+                input.value = ''; // Efface la réponse de l'utilisateur
+                const indicator = input.nextElementSibling;
+                indicator.style.display = 'none'; // Cache la diode
+                indicator.classList.remove('correct', 'incorrect'); // Enlève les classes de diode
+            });
+            document.getElementById('score').innerText = '0'; // Réinitialise le score
+        }
+    </script>
+</body>
+</html>
